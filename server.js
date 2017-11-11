@@ -1,14 +1,15 @@
 /* 
 * Joe Wong
-* CS4830 Exploration3
-* 10/25/2017
+* CS3380 Final Project
+* 11/10/2017
 */
 
 // We are importing the libraries we need for our server
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const mongoClient = require('mongodb').MongoClient;
+const mysql = require('mysql');
+const path = require('path');
 
 // We declare what tools can be used with our app
 app.use(bodyParser.urlencoded({extended:true}));
@@ -20,48 +21,67 @@ app.use(function(req, res, next) {
   next();
 });
 
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public'))); 
 
-// We need to connect to Mongodb
-var db;
-mongoClient.connect('Mongodb://localhost/Schooldb', (err, database) => {
-	if(err) return console.log(err);
-	db = database;
-	app.listen(3000, function () {
-		console.log('Listening on 3000');
-	});
+// We need to connect to Mysqldb
+
+const pool = mysql.createPool({
+  connectionLimit: 1,
+  host: "localhost",
+  user: "web",
+  password: "web",
+  database: "School"
+});
+
+var con;
+
+pool.getConnection(function(err,connnection) {
+  if (err) throw err;
+  con = connnection;
+  console.log("Connected!");
 });
 
 
 // This is where we define our CRUD listeners
 
-app.get('/', (req, res) => {
-    db.collection('students').find().toArray((err, result) => {
+app.get('/students', (req, res) => {
+    let sql = "SELECT * FROM students";
+    con.query(sql,(err, result) => {
         if(err) return console.log(err);
         res.send(result);
     });
 });
 
-app.post('/', (req, res) => {
-	db.collection('students').save(req.body, (err, result) => {
-		if(err) return console.log(err);
-		console.log("Saved to database");
-		res.send({message: req.body.fname + " was successfully added to the database"});
-	});
+app.post('/students', (req, res) => {
+    let student = req.body;
+    let sql = "INSERT INTO students (stuID, fname, lname, gpa, phone, addr, major, level, status) values(?,?,?,?,?,?,?,?,?)"; 
+	con.query(
+        sql, [student.stuID,student.fname,student.lname,student.gpa,student.phone,student.addr,student.major,student.level,student.status],
+        (err, result) => {
+            if(err) return console.log(err);
+            console.log("Saved to database");
+            res.send({message: req.body.fname + " was successfully added to the database"});
+        }
+    );
 });
 
-app.put('/', (req, res) => {
-    db.collection('students').findOneAndUpdate(
-        {stuID: req.body.stuID},
-        {$set: {
-            fname: req.body.fname,
-            lname: req.body.lname,
-            phone: req.body.phone,
-            addr: req.body.addr,
-            major: req.body.major,
-            gpa: req.body.gpa,
-            level: req.body.level,
-            status: req.body.status
-        }},
+app.put('/students', (req, res) => {
+    let student = req.body;
+    let sql = "UPDATE students SET stuID=?, fname=?, lname=?, gpa=?, phone=?, addr=?, major=?, level=?, status=? WHERE stuID=?";
+    con.query(
+        sql,
+        [student.stuID,
+        student.fname,
+        student.lname,
+        student.gpa,
+        student.phone,
+        student.addr,
+        student.major,
+        student.level,
+        student.status,
+        student.stuID
+        ],
         (err, result) => {
             if(err) return res.send(err);
             res.send(result);
@@ -69,10 +89,11 @@ app.put('/', (req, res) => {
     );
 });
 
-app.delete('/*', (req, res) => {
+app.delete('/students*', (req, res) => {
+    let sql = "DELETE FROM students WHERE stuID=?";
     if(req.query.stuID == "all"){
-        db.collection('students').deleteMany(
-            {},
+        con.query(
+            "DELETE FROM students",
             (err, result) => {
                 if(err) return res.send(err);
                 res.send({message: result + " was deleted successfully"});
@@ -80,12 +101,17 @@ app.delete('/*', (req, res) => {
         );
     }
     else {
-        db.collection('students').findOneAndDelete(
-            {stuID: req.query.stuID},
+        con.query(
+            sql,
+            [req.query.stuID],
             (err, result) => {
                 if(err) return res.send(err);
                 res.send({message: result + " was deleted successfully"});
             }    
         );
     }
+});
+
+app.listen(3000, function () {
+    console.log('Listening on Port 3000');
 });

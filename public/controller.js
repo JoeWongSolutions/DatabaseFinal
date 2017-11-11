@@ -1,6 +1,6 @@
 //Joe Wong
-//CS4830 Exploration 3
-//10/26/2017
+//CS3380 Final Project
+//11/10/2017
 
 angular.module('studentApp', [])
     .controller('MainController', ["$scope", function($scope){
@@ -26,7 +26,7 @@ angular.module('studentApp', [])
         $scope.population = "";
         $scope.active = "";
         $scope.students = [];
-        var url = "http://joewong.me:3000";
+        var url = "http://ec2-52-72-121-61.compute-1.amazonaws.com:3000/students";
         
         //Refresh is a helper function to refresh the view
         $scope.refresh = function () {
@@ -52,9 +52,9 @@ angular.module('studentApp', [])
                 "stuID": document.getElementById("stuId").value,
                 "fname": document.getElementById("fname").value,
                 "lname": document.getElementById("lname").value,
+                "gpa": document.getElementById("gpa").value,
                 "phone": document.getElementById("phone").value,
                 "addr": document.getElementById("addr").value,
-                "gpa": document.getElementById("gpa").value,
                 "major": document.getElementById("major").value,
                 "level": document.getElementById("level").value,
                 "status": "active"
