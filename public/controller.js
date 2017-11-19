@@ -3,7 +3,7 @@
 //11/10/2017
 
 angular.module('studentApp', [])
-    .controller('MainController', ["$scope", function($scope){
+    .controller('MainController', ["$scope", "$http", function($scope,$http){
         
         $scope.title = "Pick A";
         $scope.stuModule = false;
@@ -20,13 +20,18 @@ angular.module('studentApp', [])
                 $scope.bookModule = true;
             }
         }
+        
+        $scope.login = function (){
+            $http.post("http://ec2-52-72-121-61.compute-1.amazonaws.com:3000/login", {"username":"test","password":"pass"});
+        }        
+        
     }])
 	.controller('StudentController',["$scope", "$http", function($scope,$http) {
         
         $scope.population = "";
         $scope.active = "";
         $scope.students = [];
-        var url = "http://ec2-52-72-121-61.compute-1.amazonaws.com:3000/students";
+        var url = "http://ec2-52-72-121-61.compute-1.amazonaws.com:3000/contacts";
         
         //Refresh is a helper function to refresh the view
         $scope.refresh = function () {
@@ -35,7 +40,7 @@ angular.module('studentApp', [])
                 $scope.population = results.data.length ? results.data.length : 0;
                 
                 var active = 0;
-                angular.forEach(results.data, function(student){
+                angular.forEach($scope.students, function(student){
                     active += (student.status == "active") ? 1:0;
                 })
                 
@@ -49,7 +54,7 @@ angular.module('studentApp', [])
             console.log("\n[Insert into DB]");
 
             var studentInput = {
-                "stuID": document.getElementById("stuId").value,
+                "userID": document.getElementById("stuId").value,
                 "fname": document.getElementById("fname").value,
                 "lname": document.getElementById("lname").value,
                 "gpa": document.getElementById("gpa").value,
@@ -85,7 +90,7 @@ angular.module('studentApp', [])
         $scope.remove = function (student) {
             console.log("\n[Delete from DB]");
 
-            $http.delete(url+"?stuID="+student.stuID)
+            $http.delete(url+"?id="+student.id)
                 .then(function() {
                 $scope.refresh();
                 console.log(student.fname + " was deleted.");
@@ -115,6 +120,7 @@ angular.module('studentApp', [])
                 console.log("All students were deleted.");
             });
         }
+
 
 }]);
 //.controller('BookController',["$scope", "$indexedDB", function($scope,$indexedDB) {
