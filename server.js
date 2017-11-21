@@ -38,6 +38,7 @@ var cookies;
 
 //This is where authentication takes place
 app.post('/login', (req,res) => {
+    console.log("Reached login function.");
     //connect to the database
     pool.getConnection(function(err,connection) {
       if (err) throw err;
