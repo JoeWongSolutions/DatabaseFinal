@@ -13,13 +13,98 @@
 </head>
 
 <body>
+
+	<nav>
+		<div class="nav-wrapper blue-grey darken-4">
+			<a class="brand-logo">Contacts Helper</a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+				<li><a onclick="addContact()">Add Contact</a></li>
+				<li><a onclick="logout()">Logout</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class="col s12 center-align">
+		<br><br>
+		<h3>Your Contacts</h3>
+		<br>
+	</div>
+
 	<div class="container">
 
-		<p>This is the contacts page.</p>
-		<div class="col s12">
-			<a class="waves-effect waves-light btn-large center-align blue-grey darken-2" onclick="testController()">Test Controller</a>
-		</div>
+		<table class="bordered striped centered white">
+			<thead>
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Company</th>
+					<th>Phone Number</th>
+					<th>Street Address</th>
+					<th>Zip Code</th>
+					<th>Email</th>
+					<th>Edit</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
 
+			<tbody class="hide" id="noContacts">
+				<tr>
+					<td colspan="9">Let's add some contacts!</td>
+				</tr>
+			</tbody>
+
+			<tbody class="" id="hasContacts">
+				<tr>
+					<td>Connor</td>
+					<td>Rowland</td>
+					<td>Mizzou</td>
+					<td>123-456-7890</td>
+					<td>1641 Timber Creek Dr.</td>
+					<td>65202</td>
+					<td>conrowland32@gmail.com</td>
+					<td><a class="btn-floating waves-effect waves-light yellow editButton"><i class="material-icons">edit</i></a></td>
+					<td><a class="btn-floating waves-effect waves-light red deleteButton"><i class="material-icons">delete</i></a></td>
+				</tr>
+				<tr>
+					<td>Logan</td>
+					<td>Harrison</td>
+					<td>Mizzou</td>
+					<td>987-654-3210</td>
+					<td>1641 Timber Creek Dr.</td>
+					<td>65202</td>
+					<td>lharrison1224@yahoo.com</td>
+					<td><a class="btn-floating waves-effect waves-light yellow editButton"><i class="material-icons">edit</i></a></td>
+					<td><a class="btn-floating waves-effect waves-light red deleteButton"><i class="material-icons">delete</i></a></td>
+				</tr>
+				<tr>
+					<td>Joe</td>
+					<td>Wong</td>
+					<td>Mizzou</td>
+					<td>246-135-2468</td>
+					<td>123 Some Other Place</td>
+					<td>65201</td>
+					<td>joewong12345@gmail.com</td>
+					<td><a class="btn-floating waves-effect waves-light yellow editButton"><i class="material-icons">edit</i></a></td>
+					<td><a class="btn-floating waves-effect waves-light red deleteButton"><i class="material-icons">delete</i></a></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<br>
+		<div class="right-align">
+			<a class="right-align btn-floating btn-large waves-effect waves-light blue-grey darken-2" onclick="addContact()"><i class="material-icons">add</i></a>
+		</div>
+	</div>
+
+	<div id="confirmDeleteModal" class="modal">
+		<div class="modal-content">
+			<h4>Are you sure?</h4>
+			<p>Are you sure you want to permanently delete this contact? This can not be undone.</p>
+		</div>
+		<div class="modal-footer">
+			<a class="modal-close waves-effect waves-light btn blue-grey">Cancel</a>
+			<a class="modal-close waves-effect waves-light btn red" onclick="deleteContact()">Delete</a>
+		</div>
 	</div>
 
 
@@ -28,7 +113,7 @@
 	<!--Import jQuery before materialize.js-->
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="js/materialize.min.js"></script>
-	<script type="text/javascript" src="js/contactsController.js"></script>
+	<script type="text/javascript" src="js/indexController.js"></script>
 </body>
 
 </html>
