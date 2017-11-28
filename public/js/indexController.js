@@ -33,13 +33,12 @@
 	
 	var testDBPull = function() {
 		console.log("Attempting to pull data from DB");
-		document.cookie = "id=1";
 		
 		$.ajax({
 			type: "GET",
-			url: "http://ec2-52-72-121-61.compute-1.amazonaws.com:3000",
-			xhrFields: {
-				withCredentials: true
+			url: "http://ec2-52-72-121-61.compute-1.amazonaws.com:3000/contacts",
+			data: {
+				userID: 1
 			},
 			crossDomain: true,
 			success: function(data) {
@@ -47,7 +46,5 @@
 			}
 		});
 	};
-	
-	testDBPull();
 
 }

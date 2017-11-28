@@ -200,7 +200,7 @@ app.delete('/user*', (req, res) => {
 // This is where we define our CRUD listeners for contacts
 
 app.get('/contacts', (req, res) => {
-    if(!req.cookies.userID){
+    if(!req.body.userID){
         return;
     }
     //connect to the database
@@ -210,7 +210,7 @@ app.get('/contacts', (req, res) => {
         console.log("Connected! from get-contacts");    
         
         //get any cookies from the request 
-        let userID = req.cookies.userID;
+        let userID = req.body.userID;
 
         //query the db
         if(userID){
