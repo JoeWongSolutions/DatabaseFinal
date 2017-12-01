@@ -44,29 +44,34 @@ app.post('/login', (req, res) => {
 	console.log("Reached login function.");
 	//connect to the database
 	pool.getConnection(function (err, connection) {
-		if (err) throw err;
+		if (err) res.send(err);
 		else {
 			//          con = connection;
 			console.log("Connected! from post-login");
 
 			let username = req.body.username;
 			let pass = req.body.password;
-			let sql = "SELECT id FROM users WHERE username=? AND password=?";
+			
+			let sql = "SELECT id, password FROM users WHERE username=?";
 			connection.query(
-				sql, [username, pass],
+				sql, [username],
 				(err, result) => {
 					if (err) {
 						console.log("There was a MYSQL error: " + err);
-						res.redirect("/");
+						res.send(err);
 					} else {
-						console.log("Checked Authentication for " + result[0].id);
-						res.cookie('userID', result[0].id, {
-							httpOnly: false
-						});
-						console.log("successfully set cookie");
-						res.send({
-							message: "Successfully set cookie"
-						});
+						if(result.length == 0) {
+							res.send({message: "Login failed.", status: 401});
+						} else {
+							var serverPass = result[0].password;
+							var salt = serverPass.substring(0, 64);
+							var hashedPass = crypto.createHash('sha256').update(pass + salt).digest('hex');
+							if(salt+hashedPass == serverPass) {
+								res.send({message: "Login succeeded.", status: 200, userID: result[0].id});
+							} else {
+								res.send({message: "Login failed.", status: 401});
+							}
+						}
 					}
 				}
 			);
@@ -77,7 +82,7 @@ app.post('/login', (req, res) => {
 
 // This is where we define CRUD for users
 
-app.get('/userAll', (req, res) => {
+app.get('/contactsAll', (req, res) => {
 	//connect to the database
 	pool.getConnection(function (err, connection) {
 		if (err) throw err;
@@ -86,7 +91,7 @@ app.get('/userAll', (req, res) => {
 
 			//query the db
 			if (true) {
-				let sql = "SELECT * FROM users";
+				let sql = "SELECT * FROM contacts";
 				connection.query(sql, (err, result) => {
 					if (err) return console.log(err);
 					else res.send(result);
@@ -133,16 +138,18 @@ app.get('/user', (req, res) => {
 
 			if (req.query.username != null) {
 				let username = req.query.username;
-				let sql = "SELECT COUNT(id) FROM users WHERE username = '" + username + "'";
-				connection.query(sql, (err, result) => {
+				let sql = "SELECT COUNT(id) FROM users WHERE username=?";
+				connection.query(sql, [username],
+				(err, result) => {
 					if (err) res.send(err);
 					else res.send(result);
 				});
 				connection.release();
 			} else {
 				let userID = req.query.userID;
-				let sql = "SELECT * FROM users WHERE id = " + userID;
-				connection.query(sql, (err, result) => {
+				let sql = "SELECT * FROM users WHERE id=?";
+				connection.query(sql, [userID],
+				(err, result) => {
 					if (err) res.send(err);
 					else res.send(result);
 				});
@@ -165,7 +172,7 @@ app.post('/user', (req, res) => {
 			connection.query(
 				sql, [
                 user.username,
-                hashedPass,
+                salt+hashedPass,
                 user.fname,
                 user.lname,
                 user.email,
@@ -175,9 +182,7 @@ app.post('/user', (req, res) => {
 					if (err) res.send(err);
 					else {
 						console.log("Saved to database");
-						res.send({
-							message: req.body.fname + " was successfully added to the database"
-						});
+						res.send({message: "User added successfully.", status: 201, userID: result.insertId});
 					}
 				}
 			);
@@ -267,14 +272,14 @@ app.get('/contacts', (req, res) => {
 
 			//query the db
 			if (userID) {
-				let sql = "SELECT * FROM contacts WHERE userID =" + userID;
-				connection.query(sql, (err, result) => {
-					if (err) return console.log(err);
+				let sql = "SELECT * FROM contacts WHERE userID=?";
+				connection.query(sql, [userID],
+					(err, result) => {
+					if (err) return res.send(err);
 					else res.send(result);
 				});
 			} else {
 				res.send("User not found.");
-				//redirect to login
 			}
 			connection.release();
 		}
@@ -282,18 +287,18 @@ app.get('/contacts', (req, res) => {
 });
 
 app.post('/contacts', (req, res) => {
-	if (!req.cookies.userID) {
-		return;
+	if (!req.body.userID) {
+		res.send("No userID");
 	}
 	pool.getConnection(function (err, connection) {
-		if (err) throw err;
+		if (err) res.send(err);
 		else {
 			console.log("Connected!");
 			let contact = req.body;
 			let sql = "INSERT INTO contacts (userID, fname, lname, company, phone, street, zip, email) values(?,?,?,?,?,?,?,?)";
 			connection.query(
 				sql, [
-                req.cookies.userID,
+                contact.userID,
                 contact.fname,
                 contact.lname,
                 contact.company,
@@ -307,7 +312,8 @@ app.post('/contacts', (req, res) => {
 					else {
 						console.log("Saved to database");
 						res.send({
-							message: req.body.fname + " was successfully added to the database"
+							message: req.body.fname + " was successfully added to the database",
+							status: 201
 						});
 					}
 				}
@@ -347,34 +353,31 @@ app.put('/contacts', (req, res) => {
 });
 
 app.delete('/contacts*', (req, res) => {
-	if (!req.cookies.userID) {
-		return;
-	}
 	pool.getConnection(function (err, connection) {
 		if (err) throw err;
 		console.log("Connected!");
 		let sql = "DELETE FROM contacts WHERE id=?";
-		if (req.query.id == "all") {
+//		if (req.query.id == "all") {
+//			connection.query(
+//				"DELETE FROM contacts",
+//				(err, result) => {
+//					if (err) return res.send(err);
+//					res.send({
+//						message: result + " was deleted successfully"
+//					});
+//				}
+//			);
+//		} else {
 			connection.query(
-				"DELETE FROM contacts",
+				sql, [req.body.id],
 				(err, result) => {
 					if (err) return res.send(err);
 					res.send({
-						message: result + " was deleted successfully"
+						message: result + " was deleted successfully", status: 200
 					});
 				}
 			);
-		} else {
-			connection.query(
-				sql, [req.query.id],
-				(err, result) => {
-					if (err) return res.send(err);
-					res.send({
-						message: result + " was deleted successfully"
-					});
-				}
-			);
-		}
+//		}
 		connection.release();
 	});
 });

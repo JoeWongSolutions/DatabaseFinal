@@ -16,9 +16,9 @@
 
 	<nav>
 		<div class="nav-wrapper blue-grey darken-4">
-			<a class="brand-logo">Contacts Helper</a>
+			<a class="brand-logo" id="navTitle">Contacts Helper</a>
 			<ul id="nav-mobile" class="right hide-on-med-and-down">
-				<li><a onclick="addContact()">Add Contact</a></li>
+				<li><a class="modal-trigger" data-target="addContactModal">Add Contact</a></li>
 				<li><a onclick="logout()">Logout</a></li>
 			</ul>
 		</div>
@@ -32,7 +32,7 @@
 
 	<div class="container">
 
-		<table class="bordered striped centered white">
+		<table class="bordered striped centered white" id="#mainTable">
 			<thead>
 				<tr>
 					<th>First Name</th>
@@ -47,13 +47,26 @@
 				</tr>
 			</thead>
 
+			<tbody class="" id="preloader">
+				<tr>
+					<td colspan="9">
+						<div class="container">
+							<div class="progress">
+								<div class="indeterminate"></div>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+
 			<tbody class="hide" id="noContacts">
 				<tr>
 					<td colspan="9">Let's add some contacts!</td>
 				</tr>
 			</tbody>
 
-			<tbody class="" id="hasContacts">
+			<tbody class="hide" id="hasContacts">
+				<!--
 				<tr>
 					<td>Connor</td>
 					<td>Rowland</td>
@@ -87,12 +100,61 @@
 					<td><a class="btn-floating waves-effect waves-light yellow editButton"><i class="material-icons">edit</i></a></td>
 					<td><a class="btn-floating waves-effect waves-light red deleteButton"><i class="material-icons">delete</i></a></td>
 				</tr>
+-->
 			</tbody>
 		</table>
 
 		<br>
 		<div class="right-align">
-			<a class="right-align btn-floating btn-large waves-effect waves-light blue-grey darken-2" onclick="addContact()"><i class="material-icons">add</i></a>
+			<a class="right-align btn-floating btn-large waves-effect waves-light blue-grey darken-2 modal-trigger" data-target="addContactModal"><i class="material-icons">add</i></a>
+		</div>
+	</div>
+
+	<div id="addContactModal" class="modal modal-fixed-footer">
+		<div class="modal-content">
+			<h4>Add a new contact</h4>
+			<form class="col s10 offset-s1">
+				<div class="row">
+					<div class="input-field col s5 offset-s1">
+						<input id="contactFirstName" type="text">
+						<label for="contactFirstName">First Name</label>
+					</div>
+					<div class="input-field col s5">
+						<input id="contactLastName" type="text">
+						<label for="contactLastName">Last Name</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s10 offset-s1">
+						<input id="company" type="text">
+						<label for="company">Company</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s5 offset-s1">
+						<input id="contactEmail" type="text">
+						<label for="contactEmail">Email</label>
+					</div>
+					<div class="input-field col s5">
+						<input id="contactPhoneNumber" type="number">
+						<label for="contactPhoneNumber">Phone Number</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s5 offset-s1">
+						<input id="streetAddress" type="text">
+						<label for="streetAddress">Street Address</label>
+					</div>
+					<div class="input-field col s5">
+						<input id="zipCode" type="number">
+						<label for="zipCode">Zip Code</label>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="modal-footer">
+			<a class="modal-close waves-effect waves-light btn-flat">Cancel</a>
+			<a class="waves-effect waves-light btn green" onclick="addContact()">Add</a>
 		</div>
 	</div>
 
@@ -102,7 +164,7 @@
 			<p>Are you sure you want to permanently delete this contact? This can not be undone.</p>
 		</div>
 		<div class="modal-footer">
-			<a class="modal-close waves-effect waves-light btn blue-grey">Cancel</a>
+			<a class="modal-close waves-effect waves-light btn-flat">Cancel</a>
 			<a class="modal-close waves-effect waves-light btn red" onclick="deleteContact()">Delete</a>
 		</div>
 	</div>
