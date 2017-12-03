@@ -82,50 +82,6 @@ app.post('/login', (req, res) => {
 
 // This is where we define CRUD for users
 
-app.get('/contactsAll', (req, res) => {
-	//connect to the database
-	pool.getConnection(function (err, connection) {
-		if (err) throw err;
-		else {
-			console.log("Connected! from get-user");
-
-			//query the db
-			if (true) {
-				let sql = "SELECT * FROM contacts";
-				connection.query(sql, (err, result) => {
-					if (err) return console.log(err);
-					else res.send(result);
-				});
-			} else {
-				//redirect to the login
-			}
-			connection.release();
-		}
-	});
-});
-
-app.get('/userDesc', (req, res) => {
-	//connect to the database
-	pool.getConnection(function (err, connection) {
-		if (err) throw err;
-		else {
-			console.log("Connected! from get-user");
-
-			//query the db
-			if (true) {
-				let sql = "DESCRIBE users";
-				connection.query(sql, (err, result) => {
-					if (err) return console.log(err);
-					else res.send(result);
-				});
-			} else {
-				//redirect to the login
-			}
-			connection.release();
-		}
-	});
-});
-
 app.get('/user', (req, res) => {
 	if (req.query.username == null && req.query.userID == null) {
 		res.send("No userID or username");
