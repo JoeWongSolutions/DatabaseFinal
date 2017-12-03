@@ -13,3 +13,7 @@
 #navTitle {
 	margin-left: 15px;
 }
+
+th {
+	cursor: pointer;
+}

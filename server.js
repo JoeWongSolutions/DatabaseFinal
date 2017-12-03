@@ -301,11 +301,11 @@ app.post('/contacts', (req, res) => {
                 contact.userID,
                 contact.fname,
                 contact.lname,
-                contact.company,
-                contact.phone,
-                contact.street,
-                contact.zip,
-                contact.email
+                contact.company == "" ? null : contact.company,
+                contact.phone == "" ? null : contact.phone,
+                contact.street == "" ? null : contact.street,
+                contact.zip == "" ? null : contact.zip,
+                contact.email == "" ? null : contact.email
             ],
 				(err, result) => {
 					if (err) return console.log(err);
@@ -336,16 +336,16 @@ app.put('/contacts', (req, res) => {
 			sql, [
                 contact.fname,
                 contact.lname,
-                contact.company,
-                contact.phone,
-                contact.street,
-                contact.zip,
-                contact.email,
+                contact.company == "" ? null : contact.company,
+                contact.phone == "" ? null : contact.phone,
+                contact.street == "" ? null : contact.street,
+                contact.zip == "" ? null : contact.zip,
+                contact.email == "" ? null : contact.email,
                 contact.id
             ],
 			(err, result) => {
 				if (err) return res.send(err);
-				res.send(result);
+				res.send({message: "Contact successfully updated.", status: 200});
 			}
 		);
 		connection.release();

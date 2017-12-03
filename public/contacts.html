@@ -32,18 +32,18 @@
 
 	<div class="container">
 
-		<table class="bordered striped centered white" id="#mainTable">
+		<table class="bordered striped centered white" id="mainTable">
 			<thead>
 				<tr>
-					<th>First Name</th>
-					<th>Last Name</th>
-					<th>Company</th>
-					<th>Phone Number</th>
-					<th>Street Address</th>
-					<th>Zip Code</th>
-					<th>Email</th>
-					<th>Edit</th>
-					<th>Delete</th>
+					<th onclick="sortTable(1)">First Name</th>
+					<th onclick="sortTable(2)">Last Name</th>
+					<th onclick="sortTable(3)">Company</th>
+					<th onclick="sortTable(4)">Phone Number</th>
+					<th onclick="sortTable(5)">Street Address</th>
+					<th onclick="sortTable(6)">Zip Code</th>
+					<th onclick="sortTable(7)">Email</th>
+					<th onclick="sortTable(8)">Edit</th>
+					<th onclick="sortTable(9)">Delete</th>
 				</tr>
 			</thead>
 
@@ -66,41 +66,7 @@
 			</tbody>
 
 			<tbody class="hide" id="hasContacts">
-				<!--
-				<tr>
-					<td>Connor</td>
-					<td>Rowland</td>
-					<td>Mizzou</td>
-					<td>123-456-7890</td>
-					<td>1641 Timber Creek Dr.</td>
-					<td>65202</td>
-					<td>conrowland32@gmail.com</td>
-					<td><a class="btn-floating waves-effect waves-light yellow editButton"><i class="material-icons">edit</i></a></td>
-					<td><a class="btn-floating waves-effect waves-light red deleteButton"><i class="material-icons">delete</i></a></td>
-				</tr>
-				<tr>
-					<td>Logan</td>
-					<td>Harrison</td>
-					<td>Mizzou</td>
-					<td>987-654-3210</td>
-					<td>1641 Timber Creek Dr.</td>
-					<td>65202</td>
-					<td>lharrison1224@yahoo.com</td>
-					<td><a class="btn-floating waves-effect waves-light yellow editButton"><i class="material-icons">edit</i></a></td>
-					<td><a class="btn-floating waves-effect waves-light red deleteButton"><i class="material-icons">delete</i></a></td>
-				</tr>
-				<tr>
-					<td>Joe</td>
-					<td>Wong</td>
-					<td>Mizzou</td>
-					<td>246-135-2468</td>
-					<td>123 Some Other Place</td>
-					<td>65201</td>
-					<td>joewong12345@gmail.com</td>
-					<td><a class="btn-floating waves-effect waves-light yellow editButton"><i class="material-icons">edit</i></a></td>
-					<td><a class="btn-floating waves-effect waves-light red deleteButton"><i class="material-icons">delete</i></a></td>
-				</tr>
--->
+				
 			</tbody>
 		</table>
 
@@ -155,6 +121,54 @@
 		<div class="modal-footer">
 			<a class="modal-close waves-effect waves-light btn-flat">Cancel</a>
 			<a class="waves-effect waves-light btn green" onclick="addContact()">Add</a>
+		</div>
+	</div>
+	
+	<div id="editContactModal" class="modal modal-fixed-footer">
+		<div class="modal-content">
+			<h4>Edit a contact</h4>
+			<form class="col s10 offset-s1">
+				<div class="row">
+					<div class="input-field col s5 offset-s1">
+						<input id="editFirstName" type="text">
+						<label for="contactFirstName">First Name</label>
+					</div>
+					<div class="input-field col s5">
+						<input id="editLastName" type="text">
+						<label for="contactLastName">Last Name</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s10 offset-s1">
+						<input id="editCompany" type="text">
+						<label for="company">Company</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s5 offset-s1">
+						<input id="editEmail" type="text">
+						<label for="contactEmail">Email</label>
+					</div>
+					<div class="input-field col s5">
+						<input id="editPhoneNumber" type="number">
+						<label for="contactPhoneNumber">Phone Number</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s5 offset-s1">
+						<input id="editStreetAddress" type="text">
+						<label for="streetAddress">Street Address</label>
+					</div>
+					<div class="input-field col s5">
+						<input id="editZipCode" type="number">
+						<label for="zipCode">Zip Code</label>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="modal-footer">
+			<a class="modal-close waves-effect waves-light btn-flat">Cancel</a>
+			<a class="waves-effect waves-light btn green" onclick="editContact()">Save</a>
 		</div>
 	</div>
 

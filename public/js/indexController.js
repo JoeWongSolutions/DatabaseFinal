@@ -1,6 +1,8 @@
 {
 
 	var deleteTemp;
+	var editTemp;
+	var editID;
 
 	$(document).ready(function () {
 		if (window.location.pathname == '/') {
@@ -43,7 +45,7 @@
 				id: idToDelete
 			},
 			success: function (result) {
-				if(result.status == 200) {
+				if (result.status == 200) {
 					Materialize.toast("Contact deleted.", 4000, 'green');
 					getUserContacts();
 				} else {
@@ -71,11 +73,11 @@
 		var emailReg = /\S+@\S+\.\S+/;
 		var numberDupeUsernames = 0;
 
-		if($('#firstName').val().length < 1) {
+		if ($('#firstName').val().length < 1) {
 			Materialize.toast("Please enter a first name.", 4000, 'red darken-2');
 		} else if ($('#firstName').val().length > 30) {
 			Materialize.toast("First name cannot be more than 30 characters.", 4000, 'red darken-2');
-		} else if($('#lastName').val().length < 1) {
+		} else if ($('#lastName').val().length < 1) {
 			Materialize.toast("Please enter a last name.", 4000, 'red darken-2');
 		} else if ($('#lastName').val().length > 30) {
 			Materialize.toast("Last name cannot be more than 30 characters.", 4000, 'red darken-2');
@@ -157,25 +159,25 @@
 			});
 		}
 	};
-	
-	var addContact = function() {
-		if($('#contactFirstName').val().length < 1) {
+
+	var addContact = function () {
+		if ($('#contactFirstName').val().length < 1) {
 			Materialize.toast("Please enter a first name.", 4000, 'red darken-2');
 		} else if ($('#contactFirstName').val().length > 62) {
 			Materialize.toast("First name can not be longer than 62 characters.", 4000, 'red darken-2');
-		} else if($('#contactLastName').val().length < 1) {
+		} else if ($('#contactLastName').val().length < 1) {
 			Materialize.toast("Please enter a last name.", 4000, 'red darken-2');
-		} else if($('#contactLastName').val().length > 62) {
+		} else if ($('#contactLastName').val().length > 62) {
 			Materialize.toast("Last name can not be longer than 62 characters.", 4000, 'red darken-2');
-		} else if($('#company').val().length > 62) {
+		} else if ($('#company').val().length > 62) {
 			Materialize.toast("Company name can not be longer than 62 characters.", 4000, 'red darken-2');
-		} else if($('#contactPhoneNumber').val().length > 13) {
+		} else if ($('#contactPhoneNumber').val().length > 13) {
 			Materialize.toast("Phone number can not be longer than 13 digits.", 4000, 'red darken-2');
-		} else if($('#streetAddress').val().length > 254) {
+		} else if ($('#streetAddress').val().length > 254) {
 			Materialize.toast("Street address can not be longer than 254 characters.", 4000, 'red darken-2');
-		} else if($('#zipCode').val().length > 10) {
+		} else if ($('#zipCode').val().length > 10) {
 			Materialize.toast("Zip code can not be more than 10 digits.", 4000, 'red darken-2');
-		} else if($('#contactEmail').val().length > 254) {
+		} else if ($('#contactEmail').val().length > 254) {
 			Materialize.toast("Email can not be more than 254 characters.", 4000, 'red darken-2');
 		} else {
 			$.ajax({
@@ -185,19 +187,76 @@
 					userID: getCookie("userID"),
 					fname: $('#contactFirstName').val(),
 					lname: $('#contactLastName').val(),
-					company: $('#company').val(),
-					phone: $('#contactPhoneNumber').val(),
-					street: $('#streetAddress').val(),
-					zip: $('#zipCode').val(),
-					email: $('#contactEmail').val()
+					company: $('#company').val() == "" ? null : $('#company').val(),
+					phone: $('#contactPhoneNumber').val() == "" ? null : $('#contactPhoneNumber').val(),
+					street: $('#streetAddress').val() == "" ? null : $('#streetAddress').val(),
+					zip: $('#zipCode').val() == "" ? null : $('#zipCode').val(),
+					email: $('#contactEmail').val() == "" ? null : $('#contactEmail').val()
 				},
 				success: function (result) {
-					if(result.status == 201) {
+					if (result.status == 201) {
 						$('#addContactModal').modal('close');
 						Materialize.toast("Contact added successfully.", 4000, 'green');
 						getUserContacts();
+						resetForm();
 					} else {
 						Materialize.toast("Error adding contact.", 4000, 'red darken-2');
+					}
+				}
+			});
+		}
+	};
+
+	var resetForm = function () {
+		$('#contactFirstName').val("");
+		$('#contactLastName').val("");
+		$('#company').val("");
+		$('#contactPhoneNumber').val("");
+		$('#streetAddress').val("");
+		$('#zipCode').val("");
+		$('#contactEmail').val("");
+	};
+
+	var editContact = function () {
+		if ($('#editFirstName').val().length < 1) {
+			Materialize.toast("Please enter a first name.", 4000, 'red darken-2');
+		} else if ($('#editFirstName').val().length > 62) {
+			Materialize.toast("First name can not be longer than 62 characters.", 4000, 'red darken-2');
+		} else if ($('#editLastName').val().length < 1) {
+			Materialize.toast("Please enter a last name.", 4000, 'red darken-2');
+		} else if ($('#editLastName').val().length > 62) {
+			Materialize.toast("Last name can not be longer than 62 characters.", 4000, 'red darken-2');
+		} else if ($('#editCompany').val().length > 62) {
+			Materialize.toast("Company name can not be longer than 62 characters.", 4000, 'red darken-2');
+		} else if ($('#editPhoneNumber').val().length > 13) {
+			Materialize.toast("Phone number can not be longer than 13 digits.", 4000, 'red darken-2');
+		} else if ($('#editStreetAddress').val().length > 254) {
+			Materialize.toast("Street address can not be longer than 254 characters.", 4000, 'red darken-2');
+		} else if ($('#editZipCode').val().length > 10) {
+			Materialize.toast("Zip code can not be more than 10 digits.", 4000, 'red darken-2');
+		} else if ($('#editEmail').val().length > 254) {
+			Materialize.toast("Email can not be more than 254 characters.", 4000, 'red darken-2');
+		} else {
+			$.ajax({
+				type: "PUT",
+				url: "http://ec2-52-72-121-61.compute-1.amazonaws.com:3000/contacts",
+				data: {
+					fname: $('#editFirstName').val(),
+					lname: $('#editLastName').val(),
+					company: $('#editCompany').val() == "" ? null : $('#editCompany').val(),
+					phone: $('#editPhoneNumber').val() == "" ? null : $('#editPhoneNumber').val(),
+					street: $('#editStreetAddress').val() == "" ? null : $('#editStreetAddress').val(),
+					zip: $('#editZipCode').val() == "" ? null : $('#editZipCode').val(),
+					email: $('#editEmail').val() == "" ? null : $('#editEmail').val(),
+					id: editID
+				},
+				success: function (result) {
+					if (result.status == 200) {
+						$('#editContactModal').modal('close');
+						Materialize.toast("Contact edited successfully.", 4000, 'green');
+						getUserContacts();
+					} else {
+						Materialize.toast("Error editing contact.", 4000, 'red darken-2');
 					}
 				}
 			});
@@ -263,7 +322,25 @@
 							editHtml + deleteHtml + "</tr>");
 					}
 					$('.editButton').on('click', function () {
-						//TODO - edit function
+						editTemp = $(this).closest('tr');
+						$('#editContactModal').modal('open');
+						editID = parseInt(editTemp[0].cells[0].innerHTML);
+						var fName = editTemp[0].cells[1].innerHTML;
+						var lName = editTemp[0].cells[2].innerHTML;
+						var company = editTemp[0].cells[3].innerHTML == null ? "" : editTemp[0].cells[3].innerHTML;
+						var phone = editTemp[0].cells[4].innerHTML == null ? "" : editTemp[0].cells[4].innerHTML;
+						var address = editTemp[0].cells[5].innerHTML == null ? "" : editTemp[0].cells[5].innerHTML;
+						var zip = editTemp[0].cells[6].innerHTML == null ? "" : parseInt(editTemp[0].cells[6].innerHTML);
+						var email = editTemp[0].cells[7].innerHTML == null ? "" : editTemp[0].cells[7].innerHTML;
+
+						$('#editFirstName').val(fName);
+						$('#editLastName').val(lName);
+						$('#editCompany').val(company);
+						$('#editEmail').val(email);
+						$('#editPhoneNumber').val(phone);
+						$('#editStreetAddress').val(address);
+						$('#editZipCode').val(zip);
+						Materialize.updateTextFields();
 					});
 					$('.deleteButton').on('click', function () {
 						deleteTemp = $(this).closest('tr');
@@ -273,6 +350,45 @@
 				$('#preloader').addClass("hide");
 			}
 		});
+	};
+
+	var sortTable = function (column) {
+		var table = $('#mainTable')
+		var switching = true;
+		var direction = "asc";
+		var rows, first, second, i, rowTemp;
+		var numberSwitches = 0;
+		var needsSwitch = false;
+		while (switching) {
+			switching = false;
+			rows = $('#hasContacts').get()[0].childNodes;
+			for (i = 0; i < (rows.length - 1); i++) {
+				shouldSwitch = false;
+				first = rows[i].childNodes[column];
+				second = rows[i + 1].childNodes[column];
+				if (direction == "asc") {
+					if (first.innerHTML.toLowerCase() > second.innerHTML.toLowerCase()) {
+						needsSwitch = true;
+						break;
+					}
+				} else if (direction == "desc") {
+					if (first.innerHTML.toLowerCase() < second.innerHTML.toLowerCase()) {
+						needsSwitch = true;
+						break;
+					}
+				}
+			}
+			if (needsSwitch && i < rows.length-1) {
+				numberSwitches++;
+				rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+				switching = true;
+			} else {
+				if (numberSwitches == 0 && direction == "asc") {
+					direction = "desc";
+					switching = true;
+				}
+			}
+		}
 	};
 
 }
