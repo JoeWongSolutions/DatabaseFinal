@@ -9,25 +9,25 @@ This project is a web app to help users manage their contacts. First, a user log
 
 ### Table Schema
 ##### Users
-id int unsigned not null auto_increment primary key,
-username varchar(255) not null,
-password varchar(255) not null,
-fname varchar(255),
-lname varchar(255),
-email varchar(255) not null,
-joined datetime
+  id int unsigned not null auto_increment primary key,
+  username varchar(255) not null,
+  password varchar(255) not null,
+  fname varchar(255),
+  lname varchar(255),
+  email varchar(255) not null,
+  joined datetime
 
 ##### Contacts
-id int unisgned not null auto_increment primary key, 
-userID int unsigned not null,
-fname varchar(63), 
-lname varchar(63),
-company varchar(63),
-phone varchar(13),
-street varchar(255),
-zip varchar(10),
-email varchar(255),
-foreign key (userID) references users(id) in delete cascade
+  id int unisgned not null auto_increment primary key, 
+  userID int unsigned not null,
+  fname varchar(63), 
+  lname varchar(63),
+  company varchar(63),
+  phone varchar(13),
+  street varchar(255),
+  zip varchar(10),
+  email varchar(255),
+  foreign key (userID) references users(id) in delete cascade
 
 ### CRUD
 There are two main entities in our app: users and contacts. Users do not have full CRUD capabilities, but the contacts they have do support full CRUD capabilites.
