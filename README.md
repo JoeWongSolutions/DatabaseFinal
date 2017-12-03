@@ -32,13 +32,13 @@ This project is a web app to help users manage their contacts. First, a user log
 ### CRUD
 There are two main entities in our app: users and contacts. Users do not have full CRUD capabilities, but the contacts they have do support full CRUD capabilites.
 ##### Create
-Contacts are created by pushing the "+" button in the bottom right of the dashboard and then completing the accompanying form. The actual creation happens on line 162 of server.js.
+Contacts are created by pushing the "+" button in the bottom right of the dashboard and then completing the accompanying form. The actual creation happens on line 162 of `server.js`.
 ##### Read
-Contacts are read to be displayed on the contacts dashboard page. The functionality to read all the contacts for a given user from the database is done on line 259 of server.js.
+Contacts are read to be displayed on the contacts dashboard page. The functionality to read all the contacts for a given user from the database is done on line 259 of `server.js`.
 ##### Update
-Contacts can be updated by clicking the yellow pencil on the contacts dashboard. This is actually done on line 326 of server.js.
+Contacts can be updated by clicking the yellow pencil on the contacts dashboard. This is actually done on line 326 of `server.js`.
 ##### Delete
-Contacts can be deleted by clicking the red trash can on the conacts dashboard. The deletion from the table is performed by the code on line 355 of server.js.
+Contacts can be deleted by clicking the red trash can on the conacts dashboard. The deletion from the table is performed by the code on line 355 of `server.js`.
 
 ### Website
 [Link to website](http://ec2-52-72-121-61.compute-1.amazonaws.com:3000)
