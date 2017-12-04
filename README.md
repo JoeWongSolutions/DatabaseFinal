@@ -40,6 +40,9 @@ Contacts can be updated by clicking the yellow pencil on the contacts dashboard.
 ##### Delete
 Contacts can be deleted by clicking the red trash can on the conacts dashboard. The deletion from the table is performed by the code on line 355 of `server.js`.
 
+### Entity Relationship Diagram
+[Link to diagram](https://github.com/JoeWongSolutions/DatabaseFinal/blob/master/erd.png)
+
 ### Website
 [Link to website](http://ec2-52-72-121-61.compute-1.amazonaws.com:3000)
 
