@@ -43,8 +43,5 @@ Contacts can be deleted by clicking the red trash can on the conacts dashboard. 
 ### Entity Relationship Diagram
 [Link to diagram](https://github.com/JoeWongSolutions/DatabaseFinal/blob/master/erd.png)
 
-### Website
-[Link to website](http://ec2-52-72-121-61.compute-1.amazonaws.com:3000)
-
 ### Video Demo
 [Link to video](https://youtu.be/pqNncVIm2Ls)
